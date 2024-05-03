@@ -1,0 +1,63 @@
+/*
+    Rust Rechner
+    add_op = "+" | "-"
+    mul_op = "*" | "/"
+*/
+
+use std::io;
+
+type CalcInt = i64;
+
+struct ParseState {
+    line: String,
+    index: ustring,
+}
+
+fn LinetoIndex(ps: &ParseState)->char{ps.line.as_bytes()[ps.index-1]as char           /*Nimmt Bezug auf ParseState-> Zugriff auf das "line" Feld->konvertiert den String in "Byte-slices"->Nimmt Bezug auf den Byte Part im "Index"*/
+}
+
+fn error(msg:String){
+    eprint!("error:{}", msg);
+    ::std::process::exit(1);                                                        /*Generiert einen Fehler-Stream-> "1" ist der Error-Code*/
+}
+
+fn lex_match(ps:&mut ParseState, expected:char){
+    if LinetoIndex(ps)==expected {
+        ps.index += 1;
+        return
+    }
+    
+    error(format!("error Abgleich {} an index {}", expected, ps.index));            /*Fail-save*/
+}
+
+fn scan_digits(ps:&mut ParseState)->CalcInt{
+    const BASE:CalcInt;
+    loop{
+        let digit:CalcInt;
+        match token(ps){
+            '0'=> digit = 0,
+            '1'=> digit = 1,
+            '2'=> digit = 2,
+            '3'=> digit = 3,
+            '4'=> digit = 4,
+            '5'=> digit = 5,
+            '6'=> digit = 6,
+            '7'=> digit = 7,
+            '8'=> digit = 8,
+            '9'=> digit = 9,
+            _ => break
+        }
+        if digit >= BASE{
+            error(format!("Zahl {} außerhalb der Reichweite der Basis{}", digit, BASE));
+        }
+        
+        if val > (std::i64::MAX - digit)/BASE {
+            error(format!("Integer overflow"));
+        }
+        
+        val = val*BASE + digit;
+        ps.index += 1;
+    }
+    
+    return val
+}
